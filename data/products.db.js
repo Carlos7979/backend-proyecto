@@ -4,7 +4,6 @@ class Product {
     constructor(path) {
         this.path = path;
         this.products = [];
-        this.idCounter = 0;
     }
     async addProduct(
 		title,
@@ -86,7 +85,6 @@ class Product {
             products = JSON.parse(products);
             const product = products.find(e => e.id === id);
             if (product) return product;
-            // else return `Error, el producto con id ${id} no se ha encontrado`
             else return 'Not found';
         } catch (error) {
             if (error.message.includes('no such file or directory')) {
