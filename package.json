@@ -1,7 +1,7 @@
 {
   "name": "backend-proyecto",
   "version": "1.0.0",
-  "description": "Express backend proyect",
+  "description": "Express backend project",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

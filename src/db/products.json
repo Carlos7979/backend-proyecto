@@ -1,0 +1,52 @@
+[
+	{
+		"title": "testing first route",
+		"description": "uno",
+		"code": "001",
+		"price": 32,
+		"status": true,
+		"stock": 3,
+		"category": "dos",
+		"id": "1"
+	  },
+	  {
+		"title": "testing first route",
+		"description": "uno",
+		"code": "002",
+		"price": 32,
+		"status": true,
+		"stock": 3,
+		"category": "dos",
+		"id": "2"
+	  },
+	  {
+		"title": "testing first route",
+		"description": "uno",
+		"code": "003",
+		"price": 32,
+		"status": true,
+		"stock": 3,
+		"category": "dos",
+		"id": "3"
+	  },
+	  {
+		"title": "testing first route",
+		"description": "uno",
+		"code": "004",
+		"price": 32,
+		"status": true,
+		"stock": 3,
+		"category": "dos",
+		"id": "4"
+	  },
+	  {
+		"title": "testing first route",
+		"description": "uno",
+		"code": "005",
+		"price": 32,
+		"status": true,
+		"stock": 3,
+		"category": "dos",
+		"id": "5"
+	  }
+]
