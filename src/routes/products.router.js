@@ -53,10 +53,39 @@ router.get('/:pid', async (req, res) => {
 	try {
 		let { pid } = req.params
 		const product = await Product.getProductById(pid)
-		if (product) {
-			return res.send({ status: "success", payload: product })
+		if (product === 'Not found') {
+			return res.status(400).send( {status: "error", error: `El producto con el id ${pid} no existe`} )
 		}
-		return res.status(400).send( {status: "error", error: `El producto con el id ${id} no existe`} )
+		return res.send({ status: "success", payload: product })
+	} catch (error) {
+		console.log(error)
+	}
+})
+
+router.put('/:pid', async (req, res) => {
+	try {
+		let { pid } = req.params
+		const product = await Product.updateProduct(pid, req.body)
+		if (product === 'Not found') {
+			return res.status(400).send( {status: "error", error: `El producto con el id ${pid} no existe`} )
+		}
+		if (product === 'El valor de code debe ser único') {
+			return res.status(400).send( {status: "error", error: `El valor de code ya existe para otro producto`} )
+		}
+		return res.send({ status: "success", payload: product })
+	} catch (error) {
+		console.log(error)
+	}
+})
+
+router.delete('/:pid', async (req, res) => {
+	try {
+		let { pid } = req.params
+		const product = await Product.deleteProduct(pid)
+		if (product === 'Not found') {
+			return res.status(400).send( {status: "error", error: `El producto con el id ${pid} no existe`} )
+		}
+		return res.send({ status: "success", payload: product })
 	} catch (error) {
 		console.log(error)
 	}

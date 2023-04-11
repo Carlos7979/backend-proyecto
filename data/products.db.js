@@ -84,8 +84,6 @@ class Product {
         try {
             let products = await fs.promises.readFile(this.path, { encoding: 'utf8' });
             products = JSON.parse(products);
-			console.log(typeof id);
-
             const product = products.find(e => e.id === id);
             if (product) return product;
             // else return `Error, el producto con id ${id} no se ha encontrado`
@@ -117,7 +115,7 @@ class Product {
                     if (key !== 'code') product[key] = object[key];
                     else {
 						if (products.some((e, i) => e.code === object[key] && i !== index))
-                            throw Error('El valor de code debe ser único');
+                            return 'El valor de code debe ser único';
                     }
                 }
             }
