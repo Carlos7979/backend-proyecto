@@ -1,4 +1,3 @@
-const { log } = require('console');
 const fs = require('fs');
 
 class Product {
@@ -23,7 +22,8 @@ class Product {
             let products = await fs.promises.readFile(this.path, { encoding: 'utf8' });
             products = JSON.parse(products);
             if (products.some(e => e.code === code)) throw Error('El valor de code debe ser único');
-            const product = {
+            if (!thumbnails) thumbnails = []
+			const product = {
                 title,
 				description,
 				code,
