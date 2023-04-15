@@ -16,9 +16,8 @@ router.post('/:cid/product/:pid', async (req, res) => {
 	try {
 		const product = await Product.getProductById(pid)
 		if (product === 'Not found') return res.status(400).send( {status: "error", error: `El producto con el id ${pid} no existe`} )
-		const cart = await Cart.addProduct(cid)
-		if (cart === 'Not found') return res.status(400).send( {status: "error", error: `El carrito con el id ${cid} no existe`} )
 		const products = await Cart.addProduct(cid, product)
+		if (products === 'Cart not found') return res.status(400).send( {status: "error", error: `El carrito con el id ${cid} no existe`} )
 		res.send({ status: "success", payload: products })
 	} catch (error) {
 		console.log(error)

@@ -36,7 +36,6 @@ class Carts {
         }
     }
 	async addProduct(cid, product) {
-		// console.log(cid, product);
         try {
             let carts = await fs.promises.readFile(this.path, { encoding: 'utf8' });
             carts = JSON.parse(carts);
@@ -47,10 +46,9 @@ class Carts {
                     return true;
                 }
             });
-            if (!cart) return 'Not found';
+            if (!cart) return 'Cart not found';
 			let productIndex;
 			const cartProduct = cart.products.find((e, i) => {
-				console.log(product.id);
                 if (e.product === product.id) {
                     productIndex = i;
                     return true;
