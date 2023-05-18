@@ -1,0 +1,58 @@
+ul {
+	list-style: none;
+	font-family: Arial, Helvetica, sans-serif;
+	padding-left: 10px;
+	width: fit-content;
+}
+
+.card-container {
+	margin: 10px 0;
+}
+.card {
+	border: 1px solid black;
+	width: fit-content;
+	max-width: 220px;
+	display: inline-block;
+	margin: 5px 0;
+	padding-right: 10px;
+	border-radius: 5px;
+}
+
+.card-img {
+	max-height: 100px;
+	width: auto;
+	min-height: 100px;
+	min-width: 60%;
+	border: 1px solid brown;
+	border-radius: 5px;
+}
+
+.real-time-products {
+	margin: 5px;
+}
+
+.card-description {
+	width: 200px;
+}
+
+.delete-card {
+	border: solid 1px black;
+	border-radius: 3px;
+	padding: 3px;
+	margin: 3px auto;
+	text-align: center;
+	width: 50%;
+	font-weight: 700;
+	background-color: rgb(187, 102, 102);
+	position: relative;
+	user-select: none;
+}
+
+.delete-card:hover {
+	cursor: pointer;
+}
+
+.delete-card:active {
+	top: 1px;
+	left: 1px;
+}

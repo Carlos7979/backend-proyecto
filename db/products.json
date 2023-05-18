@@ -1,0 +1,60 @@
+[
+  {
+    "idCounter": 5
+  },
+  {
+    "title": "Galletas artesanales",
+    "description": "Galletas de mantequilla",
+    "code": "GA-001",
+    "price": 28,
+    "status": true,
+    "stock": 10,
+    "category": "Galletas",
+	"thumbnails": ["https://cdn7.kiwilimon.com/recetaimagen/11964/5073.jpg"],
+    "id": "1"
+  },
+  {
+    "title": "Galletas artesanales",
+    "description": "Galletas con sabor a canela",
+    "code": "GA-002",
+    "price": 31,
+    "status": true,
+    "stock": 20,
+    "category": "Galletas",
+	"thumbnails": ["https://cecotec.es/recetas/wp-content/uploads/2019/09/Mambo-galletas-jengibre.jpg"],
+    "id": "2"
+  },
+  {
+    "title": "Galletas artesanales",
+    "description": "Galletas de jengibre",
+    "code": "GA-003",
+    "price": 15,
+    "status": true,
+    "stock": 51,
+    "category": "Galletas",
+	"thumbnails": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlP-USG8XQtDF1DPLJmF7L_8mseMkNALr3zvoqyzCqxaFf-lj2c82c2g4tC8WysetN_2g&usqp=CAU"],
+    "id": "3"
+  },
+  {
+    "title": "Galletas artesanales",
+    "description": "Galletas con chispas de chocolate",
+    "code": "GA-004",
+    "price": 12,
+    "status": true,
+    "stock": 25,
+    "category": "Galletas",
+	"thumbnails": ["https://elmundoenrecetas.s3.amazonaws.com/uploads/recipe/picture/311/IMG_3256-500.jpg"],
+    "id": "4"
+  },
+  {
+    "title": "Galletas artesanales",
+    "description": "Galletas con sabor a limón",
+    "code": "GA-005",
+    "price": 1,
+    "status": true,
+    "stock": 38,
+    "category": "Galletas",
+	"thumbnails": ["https://images.hola.com/imagenes/cocina/recetas/20200902174521/galletas-esponjosas-limon/0-860-699/galletas-age-t.jpg"],
+    "id": "5"
+  }
+]
