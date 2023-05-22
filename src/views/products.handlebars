@@ -18,17 +18,14 @@
 		{{#each products}}
 		<div class="card">
 			<ul>
-				<li>
-					Id: {{this.id}}
-				</li>
-				<li>
-					Título: {{this.title}}
-				</li>
+				<li>Categoría: {{this.category}}</li>
+				<li>Título: {{this.title}}</li>
 				<li>Descripción: {{this.description}}</li>
 				<li>Precio: {{this.price}}</li>
 				<li><img class="card-img" src={{this.thumbnails}} alt=""></li>
 				<li>Código: {{this.code}}</li>
 				<li>Stock: {{this.stock}}</li>
+				<li>Id: {{this._id}}</li>
 			</ul>
 		</div>
 		{{/each}}

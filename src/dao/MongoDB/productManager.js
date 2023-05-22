@@ -7,7 +7,6 @@ class ProductManager {
                 return 'Todos los campos son obligatorios'
             const productByCode = await Products.find({ code }).select('-__v').lean()
             if (productByCode.length > 0) return 'El valor de code debe ser único'
-            if (!thumbnails) thumbnails = []
             const product = {
                 title,
                 description,
@@ -46,7 +45,8 @@ class ProductManager {
             if (!product) return 'Not found'
             if (object.hasOwnProperty('code')) {
                 const product2 = await Products.find({ code: object['code'] })
-                if (product2[0]._id.toString() !== id) return 'El valor de code debe ser único'
+                if (product2.length > 0 && product2[0]._id.toString() !== id)
+                    return 'El valor de code debe ser único'
             }
             await Products.findByIdAndUpdate(id, object)
             return await Products.findById(id).select('-__v').lean()
