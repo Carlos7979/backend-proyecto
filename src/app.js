@@ -18,6 +18,11 @@ app.use('/static', express.static('public'))
 // routes
 app.use('/', routes)
 
+// not found
+app.use((req, res, next) =>{
+	res.status(404).render('not-found', {})
+})
+
 // errors
 app.use((err, req, res, next) => {
     const status = err.status || 500
