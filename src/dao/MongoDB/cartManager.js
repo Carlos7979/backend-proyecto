@@ -36,7 +36,7 @@ class CartManager {
     }
     async getProductsByCartId(cid) {
         try {
-            const cart = await Carts.findById(cid).select('-__v').lean()
+            const cart = await Carts.findById(cid).select('-__v').lean().populate('products.product')
             if (!cart) return 'Not found'
 			return cart.products
         } catch (error) {
