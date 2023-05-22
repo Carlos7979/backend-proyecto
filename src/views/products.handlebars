@@ -15,7 +15,15 @@
 		<button id="button-emit-for-all" onclick="emitForAllExceptMe()">Mensaje para los demás</button>
 	</div> --}}
 	<div class="card-container">
-		{{#each products}}
+		<div>
+			{{#if hasPrevPage}}
+				<a href="{{prevLink}}"><button>Anterior</button></a>
+			{{/if}}
+			{{#if hasNextPage}}
+				<a href="{{nextLink}}"><button>Siguiente</button></a>
+			{{/if}}
+		</div>
+		{{#each docs}}
 		<div class="card">
 			<ul>
 				<li>Categoría: {{this.category}}</li>

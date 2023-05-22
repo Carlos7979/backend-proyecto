@@ -5,7 +5,7 @@ const { uploader } = require('../../utils/middleware')
 
 router.post('/', async (req, res, next) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body
-    if (!title || !description || !code || !price || !status || !stock || !category)
+    if (!title || !description || !code || !price || (status === false ? status : !status) || (stock === 0 ? false : !stock) || !category)
         return res.status(400).send({ status: 'error', error: 'Todos los campos son obligatorios' })
     try {
         const product = await Products.addProduct(
@@ -33,14 +33,31 @@ router.post('/upload', uploader.single('myFile'), (req, res, next) => {
 })
 
 router.get('/', async (req, res, next) => {
-    let { limit } = req.query
-    limit = Number(limit)
+    let { limit, page, sort, category, status } = req.query
+	if (limit) limit = Number(limit)
+	else limit = 10
+	const limitLink = `?limit=${limit}`
+	if (page) Number(page)
+	else page = 1
+	const query = {}
+	let categoryLink = ''
+	if (category) {
+		query.category = category
+		categoryLink += `&category=${category}`
+	}
+	if (status === 'true') query.status = true
+	if (status === 'false') query.status = false
+	let statusLink = ''
+	if (status) {
+		statusLink += `&status=${status}`
+	}
     try {
-        const products = await Products.getProducts()
-        if (limit && typeof limit === 'number' && limit > 0) {
-            return res.send(products.slice(0, limit))
-        }
-        return res.send({ status: 'success', payload: products })
+        const paginatedProducts = await Products.getPaginatedProducts(limit, page, sort, query)
+		const {docs, ...rest} = paginatedProducts
+		const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
+		const prevLink = hasPrevPage ? '/api/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink : null
+		const nextLink = hasNextPage ? '/api/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink : null
+		return res.send({ status: 'success', payload: docs, ...rest, prevLink, nextLink })
     } catch (error) {
         next(error)
     }
