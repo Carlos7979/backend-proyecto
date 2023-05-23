@@ -28,8 +28,23 @@ class CartManager {
                     quantity: 1
                 })
             }
-            await Carts.findByIdAndUpdate(cid, cart)
-            return cart
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+            return response
+        } catch (error) {
+            console.log(error)
+        }
+    }
+	async deleteProducts(cid) {
+        try {
+            const cart = await Carts.findById(cid).select('-__v').lean()
+            if (!cart) return 'Not found'
+            if (cart.products.length > 0) {
+                cart.products = []
+            } else {
+				return 'Products empty'
+			}
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+            return response
         } catch (error) {
             console.log(error)
         }
@@ -52,8 +67,30 @@ class CartManager {
             } else {
 				return 'Product empty'
 			}
-            await Carts.findByIdAndUpdate(cid, cart)
-            return cart
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+            return response
+        } catch (error) {
+            console.log(error)
+        }
+    }
+	async updateProduct(cid, pid, quantity) {
+        try {
+            const cart = await Carts.findById(cid).select('-__v').lean()
+            if (!cart) return 'Cart not found'
+            let productIndex
+            const cartProduct = cart.products.find((e, i) => {
+                if (e.product.toString() === pid) {
+                    productIndex = i
+                    return true
+                }
+            })
+            if (cartProduct) {
+                cart.products[productIndex].quantity = quantity
+            } else {
+				return 'Product empty'
+			}
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+            return response
         } catch (error) {
             console.log(error)
         }

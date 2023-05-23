@@ -23,7 +23,6 @@ router.get('/', async (req, res, next) => {
 	}
     try {
         const paginatedProducts = await Products.getPaginatedProducts(limit, page, sort, query)
-		const {docs, ...rest} = paginatedProducts
 		const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
 		const prevLink = hasPrevPage ? '/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink : null
 		const nextLink = hasNextPage ? '/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink : null
