@@ -5,23 +5,85 @@ ul {
 	width: fit-content;
 }
 
-.card-container {
+.cards-container {
 	margin: 10px 0;
 }
+
+.card-container {
+	position: relative;
+	display: inline-block;
+}
+
 .card {
 	border: 1px solid black;
 	width: fit-content;
 	max-width: 220px;
-	display: inline-block;
 	margin: 5px 0;
 	padding-right: 10px;
 	border-radius: 5px;
+	padding-top: 24px;
+}
+
+.card:hover {
+	cursor: pointer;
+	background-color: aliceblue;
+	border-color: dimgray;
 }
 
 .card-img {
 	max-height: 100px;
 	width: auto;
 	min-height: 100px;
+	min-width: 60%;
+	border: 1px solid brown;
+	border-radius: 5px;
+}
+
+.cart-icon {
+	position: absolute;
+	right: 0;
+	padding: 10px;
+}
+
+.cart-icon:hover {
+	cursor: pointer;
+}
+
+.cart-icon:active {
+	top: 1px;
+	right: -1px;
+}
+
+.cart-products {
+	border-radius: 5px;
+	top: 5px;
+}
+
+.cart-products:active {
+	top: 6px;
+	right: -1px;
+}
+
+.cart-products:hover {
+	background-color: whitesmoke;	
+}
+
+.card-detail {
+	position: relative;
+	border: 1px solid black;
+	min-width: fit-content;
+	/* width: 50%; */
+	/* max-width: 220px; */
+	display: inline-block;
+	margin: 5px 0;
+	padding-right: 10px;
+	border-radius: 5px;
+}
+
+.card-detail-img {
+	max-height: 300px;
+	width: auto;
+	min-height: 300px;
 	min-width: 60%;
 	border: 1px solid brown;
 	border-radius: 5px;

@@ -1,0 +1,23 @@
+<div>
+	<h1>Detalle del producto</h1>
+	<div><a href="/">Volver a home</a></div>
+	<div><a href="" onclick="backToProducts()">Volver a productos</a></div>
+	<div class="card-detail-container">
+		<div id="{{product._id}}" class="card-detail">
+			<div class="cart-icon">
+				<i class="fa fa-shopping-cart" style="font-size:36px"></i>
+			</div>
+			<ul>
+				<li>Categoría: {{product.category}}</li>
+				<li>Título: {{product.title}}</li>
+				<li>Descripción: {{product.description}}</li>
+				<li>Precio: {{product.price}}</li>
+				<li>Stock: {{product.stock}}</li>
+				<li><img class="card-detail-img" src={{product.thumbnails}} alt=""></li>
+				<li>Código: {{product.code}}</li>
+				{{!-- <li>Id: {{product._id}}</li> --}}
+			</ul>
+		</div>
+	</div>
+</div>
+<script src="/static/js/product.js"></script>

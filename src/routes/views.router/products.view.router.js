@@ -21,12 +21,31 @@ router.get('/', async (req, res, next) => {
 	if (status) {
 		statusLink += `&status=${status}`
 	}
+	let sortLink = ''
+	if (sort) {
+		sortLink += `&sort=${sort}`
+	}
     try {
         const paginatedProducts = await Products.getPaginatedProducts(limit, page, sort, query)
 		const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
-		const prevLink = hasPrevPage ? '/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink : null
-		const nextLink = hasNextPage ? '/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink : null
+		const prevLink = hasPrevPage ? '/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink + sortLink : null
+		const nextLink = hasNextPage ? '/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink + sortLink : null
         res.render('products', { ...paginatedProducts, prevLink, nextLink })
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get('/:pid', async (req, res, next) => {
+    try {
+        let { pid } = req.params
+        const product = await Products.getProductById(pid)
+        if (product === 'Not found') {
+            return res
+                .status(400)
+                .send({ status: 'error', error: `El producto con el id ${pid} no existe` })
+        }
+        return res.render('product', { product })
     } catch (error) {
         next(error)
     }

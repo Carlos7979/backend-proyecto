@@ -1,41 +1,58 @@
 <div>
 	<h1>Hello : )</h1>
 	<a href="/">Volver a home</a>
-	{{!-- <form id="add-product" action="/products" method="POST">
-		<input type="text" name="title" placeholder="Ingresa un título">
-		<input type="text" name="description" placeholder="Ingresa una descripción">
-		<input type="number" name="price" placeholder="Ingresa un precio">
-		<input type="text" name="thumbnail" placeholder="Ingresa la url de una imagen">
-		<input type="text" name="code" placeholder="Ingresa un código">
-		<input type="number" name="stock" placeholder="Ingresa un número de stock">
-		<button>Enviar</button>
-	</form>
-	<div>
-		<button id="button-emit-for-all" onclick="emitForAll()">Mensaje para todos (incluyéndome)</button>
-		<button id="button-emit-for-all" onclick="emitForAllExceptMe()">Mensaje para los demás</button>
-	</div> --}}
-	<div class="card-container">
+	<div class="cards-container">
+		<div>
+			<select name="category" id="category" onchange="handleCategory(this, {{limit}}, {{page}})">
+				<option value="">Categoría</option>
+				<option value="Galletas">Galletas</option>
+				<option value="Pasteles">Pasteles</option>
+			</select>
+			<select name="status" id="status" onchange="handleStatus(this, {{limit}}, {{page}})">
+				<option value="" selected>Disponibilidad</option>
+				<option value="true">En stock</option>
+				<option value="false">Agotado</option>
+			</select>
+			<select name="sort" id="sort" onchange="handleSort(this, {{limit}}, {{page}})">
+				<option value="" selected>Ordenar por precio</option>
+				<option value="asc">Menor a mayor</option>
+				<option value="desc">Mayor a menor</option>
+			</select>
+		</div>
 		<div>
 			{{#if hasPrevPage}}
-				<a href="{{prevLink}}"><button>Anterior</button></a>
+				<a href="{{prevLink}}"><button >Anterior</button></a>
+			{{else}}
+				<button disabled>Anterior</button>
 			{{/if}}
 			{{#if hasNextPage}}
 				<a href="{{nextLink}}"><button>Siguiente</button></a>
+			{{else}}
+				<button disabled>Siguiente</button>
 			{{/if}}
+			<span>Página {{page}} de {{totalPages}}</span>
+			<label for="limit"></label>
+			<input type="number" name="limit" id="limit" min="1" max="50" limit="{{limit}}" value="10" onchange="handleLimit(this, {{limit}}, {{page}})">
 		</div>
 		{{#each docs}}
-		<div class="card">
-			<ul>
-				<li>Categoría: {{this.category}}</li>
-				<li>Título: {{this.title}}</li>
-				<li>Descripción: {{this.description}}</li>
-				<li>Precio: {{this.price}}</li>
-				<li><img class="card-img" src={{this.thumbnails}} alt=""></li>
-				<li>Código: {{this.code}}</li>
-				<li>Stock: {{this.stock}}</li>
-				<li>Id: {{this._id}}</li>
-			</ul>
+		<div class="card-container">
+			<div class="cart-icon cart-products" onclick="handleCart(this)">
+				<i class="fa fa-shopping-cart" style="font-size:24px"></i>
+			</div>
+			<div id="{{this._id}}" class="card" onclick="handleDetail(this)">
+				<ul>
+					{{!-- <li>Categoría: {{this.category}}</li> --}}
+					<li>Título: {{this.title}}</li>
+					{{!-- <li>Descripción: {{this.description}}</li> --}}
+					<li>Precio: {{this.price}}</li>
+					<li><img class="card-img" src={{this.thumbnails}} alt=""></li>
+					{{!-- <li>Código: {{this.code}}</li> --}}
+					<li>Stock: {{this.stock}}</li>
+					{{!-- <li>Id: {{this._id}}</li> --}}
+				</ul>
+			</div>
 		</div>
 		{{/each}}
 	</div>
 </div>
+<script src="/static/js/products.js"></script>
