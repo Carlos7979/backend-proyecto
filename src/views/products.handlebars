@@ -1,6 +1,10 @@
 <div>
-	<h1>Hello : )</h1>
 	<a href="/">Volver a home</a>
+	<h1>Hello : )</h1>
+	<div class="cart-total" onclick="handleTotalCart()">
+		<span id="cart-length"></span>
+		<i class="fa fa-shopping-cart" style="font-size:36px"></i>
+	</div>
 	<div class="cards-container">
 		<div>
 			<select name="category" id="category" onchange="handleCategory(this, {{limit}}, {{page}})">
@@ -36,16 +40,21 @@
 		</div>
 		{{#each docs}}
 		<div class="card-container">
-			<div class="cart-icon cart-products" onclick="handleCart(this)">
-				<i class="fa fa-shopping-cart" style="font-size:24px"></i>
+			<div  class="quantity cart-products">
+				<span id="counter-{{this._id}}">0</span>
 			</div>
-			<div id="{{this._id}}" class="card" onclick="handleDetail(this)">
+			<div class="cart-icon cart-products">
+				<i class="fa fa-minus cart-button-disable" style="font-size:24px" aria-hidden="true" id="minus-{{this._id}}"></i>
+				<i class="fa fa-shopping-cart" style="font-size:24px"></i>
+				<i class="fa fa-plus cart-button" style="font-size:24px" aria-hidden="true" id="plus-{{this._id}}"></i>
+			</div>
+			<div id="{{this._id}}" class="card" style="background: none;" onclick="handleDetail(this)">
 				<ul>
 					{{!-- <li>Categoría: {{this.category}}</li> --}}
 					<li>Título: {{this.title}}</li>
 					{{!-- <li>Descripción: {{this.description}}</li> --}}
 					<li>Precio: {{this.price}}</li>
-					<li><img class="card-img" src={{this.thumbnails}} alt=""></li>
+					<li><img id="img-{{this._id}}" class="card-img" src={{this.thumbnails}} alt=""></li>
 					{{!-- <li>Código: {{this.code}}</li> --}}
 					<li>Stock: {{this.stock}}</li>
 					{{!-- <li>Id: {{this._id}}</li> --}}

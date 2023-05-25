@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose')
 const { Carts } = require('./models')
 
 class CartManager {
@@ -98,8 +99,18 @@ class CartManager {
     async getProductsByCartId(cid) {
         try {
             const cart = await Carts.findById(cid).select('-__v').lean().populate('products.product')
-            if (!cart) return 'Not found'
-			return cart.products
+            // const cart = await Carts.aggregate([
+			// 	{
+			// 		$match: { _id: new mongoose.Types.ObjectId(cid) }
+			// 	},
+			// 	{
+			// 		$project: {_id: 0, totalQuantity: { $sum: '$products.quantity' }, products: '$products' }
+			// 	}
+			// ])
+			// if (cart.length === 0) return 'Not found'
+			// const products = await Carts.populate(cart, { path: 'products.product' })
+			// return products
+			return cart
         } catch (error) {
             console.log(error)
         }

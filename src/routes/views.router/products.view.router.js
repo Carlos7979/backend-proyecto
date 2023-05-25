@@ -30,7 +30,7 @@ router.get('/', async (req, res, next) => {
 		const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
 		const prevLink = hasPrevPage ? '/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink + sortLink : null
 		const nextLink = hasNextPage ? '/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink + sortLink : null
-        res.render('products', { ...paginatedProducts, prevLink, nextLink })
+		res.render('products', { ...paginatedProducts, prevLink, nextLink })
     } catch (error) {
         next(error)
     }
