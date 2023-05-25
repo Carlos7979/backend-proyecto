@@ -27,10 +27,19 @@ ul {
 	background-repeat: no-repeat;
 }
 
+.detail {
+	max-width: none;
+	border: none;
+}
+
 .card:hover {
 	cursor: pointer;
 	background-color: aliceblue;
 	border-color: dimgray;
+}
+
+.detail:hover {
+	cursor: default;
 }
 
 .card-img {

@@ -68,15 +68,18 @@ const setTotalCartValue = async () => {
         const stock = e.product.stock
 		const quantity = e.quantity
 		const plus = document.getElementById(`plus-${id}`)
+		if (plus && quantity < stock) plus.addEventListener('click', handlePlus)
 		if (quantity >= stock) {
 			plus.removeEventListener('click', handlePlus)
 			plus.setAttribute('class', 'fa fa-plus cart-button-disable')
 		}
         const counter = document.getElementById(`counter-${id}`)
+		if (counter) counter.innerText = quantity
         const minus = document.getElementById(`minus-${id}`)
-        counter.innerText = quantity
-        minus.setAttribute('class', 'fa fa-minus cart-button')
-        minus.addEventListener('click', handleMinus)
+		if (minus) {
+			minus.setAttribute('class', 'fa fa-minus cart-button')
+			minus.addEventListener('click', handleMinus)
+		}
     })
     const cartLength = document.getElementById('cart-length')
     cartLength.innerText = cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)

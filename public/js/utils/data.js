@@ -1,6 +1,6 @@
 async function postCart() {
-    const response = await axios.post('api/carts', {})
-    if (response) {
+    const response = await axios.post('/api/carts', {})
+    if (response?.data?.status === 'success') {
         const cart = response.data.payload
         sessionStorage.setItem('cart', JSON.stringify(cart))
 		return cart
@@ -12,7 +12,7 @@ async function editProductCart(pid, type) {
 	if (cart) cart = JSON.parse(cart)
 	let product
 	try {
-		product = await axios.get(`api/products/${pid}`)
+		product = await axios.get(`/api/products/${pid}`)
 		if (!cart) cart = await postCart(cart)
 	} catch (error) {
 		const { stack, ...rest } = error
@@ -25,13 +25,16 @@ async function editProductCart(pid, type) {
 	const quantity = products?.quantity ? products?.quantity : 0
 	let addedProducts
 	const card = document.getElementById(pid)
+	const cardDetail = document.getElementById(`detail-${pid}`)
 	const img = document.getElementById(`img-${pid}`)
 	try {
 		card.removeAttribute('style')
+		cardDetail.removeAttribute('style')
 		img.setAttribute('style', 'opacity: 0.3;')
-		if (type === 'plus' && quantity < stock) addedProducts  = await axios.post(`api/carts/${cart._id}/product/${pid}`)
-		if (type === 'minus' && quantity > 0) addedProducts  = await axios.delete(`api/carts/${cart._id}/product/${pid}`)
+		if (type === 'plus' && quantity < stock) addedProducts  = await axios.post(`/api/carts/${cart._id}/product/${pid}`)
+		if (type === 'minus' && quantity > 0) addedProducts  = await axios.delete(`/api/carts/${cart._id}/product/${pid}`)
 		card.setAttribute('style', 'background: none;')
+		cardDetail.setAttribute('style', 'background: none;')
 		img.removeAttribute('style')
 	} catch (error) {
 		card.setAttribute('style', 'background: none;')

@@ -1,10 +1,7 @@
 <div>
 	<a href="/">Volver a home</a>
 	<h1>Hello : )</h1>
-	<div class="cart-total" onclick="handleTotalCart()">
-		<span id="cart-length"></span>
-		<i class="fa fa-shopping-cart" style="font-size:36px"></i>
-	</div>
+	{{> cart-products}}
 	<div class="cards-container">
 		<div>
 			<select name="category" id="category" onchange="handleCategory(this, {{limit}}, {{page}})">
@@ -35,8 +32,8 @@
 				<button disabled>Siguiente</button>
 			{{/if}}
 			<span>Página {{page}} de {{totalPages}}</span>
-			<label for="limit"></label>
 			<input type="number" name="limit" id="limit" min="1" max="50" limit="{{limit}}" value="10" onchange="handleLimit(this, {{limit}}, {{page}})">
+			<label for="limit">Elementos por página</label>
 		</div>
 		{{#each docs}}
 		<div class="card-container">
@@ -64,4 +61,3 @@
 		{{/each}}
 	</div>
 </div>
-<script src="/static/js/products.js"></script>

@@ -1,23 +1,30 @@
 <div>
 	<h1>Detalle del producto</h1>
 	<div><a href="/">Volver a home</a></div>
-	<div><a href="" onclick="backToProducts()">Volver a productos</a></div>
+	<div><a href="/products">Volver a productos</a></div>
+	{{> cart-products}}
 	<div class="card-detail-container">
 		<div id="{{product._id}}" class="card-detail">
-			<div class="cart-icon">
-				<i class="fa fa-shopping-cart" style="font-size:36px"></i>
+			<div  class="quantity cart-products">
+				<span id="counter-{{product._id}}">0</span>
 			</div>
-			<ul>
-				<li>Categoría: {{product.category}}</li>
-				<li>Título: {{product.title}}</li>
-				<li>Descripción: {{product.description}}</li>
-				<li>Precio: {{product.price}}</li>
-				<li>Stock: {{product.stock}}</li>
-				<li><img class="card-detail-img" src={{product.thumbnails}} alt=""></li>
-				<li>Código: {{product.code}}</li>
-				{{!-- <li>Id: {{product._id}}</li> --}}
-			</ul>
+			<div class="cart-icon cart-products">
+				<i class="fa fa-minus cart-button-disable" style="font-size:24px" aria-hidden="true" id="minus-{{product._id}}"></i>
+				<i class="fa fa-shopping-cart" style="font-size:24px"></i>
+				<i class="fa fa-plus cart-button" style="font-size:24px" aria-hidden="true" id="plus-{{product._id}}"></i>
+			</div>
+			<div id="detail-{{product._id}}" class="card detail" style="background: none;">
+				<ul>
+					<li>Título: {{product.title}}</li>
+					<li>Categoría: {{product.category}}</li>
+					<li>Descripción: {{product.description}}</li>
+					<li>Precio: {{product.price}}</li>
+					<li><img id="img-{{product._id}}" class="card-detail-img" src={{product.thumbnails}} alt=""></li>
+					<li>Stock: {{product.stock}}</li>
+					<li>Código: {{product.code}}</li>
+					{{!-- <li>Id: {{product._id}}</li> --}}
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>
-<script src="/static/js/product.js"></script>
