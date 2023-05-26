@@ -28,19 +28,20 @@ async function editProductCart(pid, type) {
 	const cardDetail = document.getElementById(`detail-${pid}`)
 	const img = document.getElementById(`img-${pid}`)
 	try {
-		card.removeAttribute('style')
-		cardDetail.removeAttribute('style')
+		if (card) card.removeAttribute('style')
+		if (cardDetail) cardDetail.removeAttribute('style')
 		img.setAttribute('style', 'opacity: 0.3;')
 		if (type === 'plus' && quantity < stock) addedProducts  = await axios.post(`/api/carts/${cart._id}/product/${pid}`)
 		if (type === 'minus' && quantity > 0) addedProducts  = await axios.delete(`/api/carts/${cart._id}/product/${pid}`)
-		card.setAttribute('style', 'background: none;')
-		cardDetail.setAttribute('style', 'background: none;')
+		if (card) card.setAttribute('style', 'background: none;')
+		if (cardDetail) cardDetail.setAttribute('style', 'background: none;')
 		img.removeAttribute('style')
 	} catch (error) {
-		card.setAttribute('style', 'background: none;')
+		if (card) card.setAttribute('style', 'background: none;')
+		if (cardDetail) cardDetail.setAttribute('style', 'background: none;')
 		img.removeAttribute('style')
 		const { stack, ...rest } = error
-		console.log(rest)
+		console.log(error)
 		return
 	}
     if (addedProducts?.data?.status === 'success') {
