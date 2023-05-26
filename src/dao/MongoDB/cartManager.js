@@ -99,7 +99,8 @@ class CartManager {
     async getProductsByCartId(cid) {
         try {
             const cart = await Carts.findById(cid).select('-__v').lean().populate('products.product')
-            // const cart = await Carts.aggregate([
+            if (!cart) return 'Cart not found'
+			// const cart = await Carts.aggregate([
 			// 	{
 			// 		$match: { _id: new mongoose.Types.ObjectId(cid) }
 			// 	},

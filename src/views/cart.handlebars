@@ -1,0 +1,64 @@
+<div>
+	{{> nav}}
+	<h1>Carrito de compras</h1>
+	{{> cart-products isInCart='true'}}
+	<div class="cards-container">
+		{{!-- <div>
+			<select name="category" id="category" onchange="handleCategory(this, {{limit}}, {{page}})">
+				<option value="">Categoría</option>
+				<option value="Galletas">Galletas</option>
+				<option value="Pasteles">Pasteles</option>
+			</select>
+			<select name="status" id="status" onchange="handleStatus(this, {{limit}}, {{page}})">
+				<option value="" selected>Disponibilidad</option>
+				<option value="true">En stock</option>
+				<option value="false">Agotado</option>
+			</select>
+			<select name="sort" id="sort" onchange="handleSort(this, {{limit}}, {{page}})">
+				<option value="" selected>Ordenar por precio</option>
+				<option value="asc">Menor a mayor</option>
+				<option value="desc">Mayor a menor</option>
+			</select>
+		</div>
+		<div>
+			{{#if hasPrevPage}}
+				<a href="{{prevLink}}"><button >Anterior</button></a>
+			{{else}}
+				<button disabled>Anterior</button>
+			{{/if}}
+			{{#if hasNextPage}}
+				<a href="{{nextLink}}"><button>Siguiente</button></a>
+			{{else}}
+				<button disabled>Siguiente</button>
+			{{/if}}
+			<span>Página {{page}} de {{totalPages}}</span>
+			<input type="number" name="limit" id="limit" min="1" max="50" limit="{{limit}}" value="10" onchange="handleLimit(this, {{limit}}, {{page}})">
+			<label for="limit">Elementos por página</label>
+		</div> --}}
+		{{#each cart.products}}
+		<div id="cardContainer-{{product._id}}" class="card-container">
+			<div class="quantity cart-products">
+				<span id="counter-{{product._id}}">0</span>
+			</div>
+			<div class="cart-icon cart-products">
+				<i class="fa fa-minus cart-button-disable" style="font-size:24px" aria-hidden="true" id="minus-{{product._id}}"></i>
+				<i class="fa fa-shopping-cart" style="font-size:24px"></i>
+				<i class="fa fa-plus cart-button" style="font-size:24px" aria-hidden="true" id="plus-{{product._id}}"></i>
+			</div>
+			<div id="{{product._id}}" class="card" style="background: none;" onclick="handleDetail(this)">
+				<ul>
+					{{!-- <li>Categoría: {{product.category}}</li> --}}
+					<li>Título: {{product.title}}</li>
+					{{!-- <li>Descripción: {{product.description}}</li> --}}
+					<li>Precio: {{product.price}}</li>
+					<li><img id="img-{{product._id}}" class="card-img" src={{product.thumbnails}} alt=""></li>
+					{{!-- <li>Código: {{product.code}}</li> --}}
+					<li>Stock: {{product.stock}}</li>
+					{{!-- <li>Id: {{product._id}}</li> --}}
+				</ul>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+</div>
+{{!-- <script src="/static/js/cart.js"></script> --}}

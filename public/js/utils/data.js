@@ -7,6 +7,18 @@ async function postCart() {
     }
 }
 
+const setTotalAmount = async () => {
+	const span = document.getElementById('total')
+	let cart = sessionStorage.getItem('cart')
+    if (cart) {
+		cart = JSON.parse(cart)
+    } else {
+		cart = await postCart(cart)
+    }
+	const total = cart?.products?.reduce((acc, curr) => acc + curr.quantity*curr.product.price, 0)
+	span.innerText = `Monto total ${total ? total : 0}`
+}
+
 async function editProductCart(pid, type) {
     let cart = sessionStorage.getItem('cart')
 	if (cart) cart = JSON.parse(cart)
@@ -16,8 +28,8 @@ async function editProductCart(pid, type) {
 		if (!cart) cart = await postCart(cart)
 	} catch (error) {
 		const { stack, ...rest } = error
-		console.log(rest)
-		return
+		if (rest) console.log(rest)
+		else console.log(error)
 	}
 	if (product?.data?.status !== 'success') return
 	const stock = product.data.payload.stock
@@ -41,7 +53,8 @@ async function editProductCart(pid, type) {
 		if (cardDetail) cardDetail.setAttribute('style', 'background: none;')
 		img.removeAttribute('style')
 		const { stack, ...rest } = error
-		console.log(error)
+		if (rest) console.log(rest)
+		else console.log(error)
 		return
 	}
     if (addedProducts?.data?.status === 'success') {
@@ -73,7 +86,10 @@ async function editProductCart(pid, type) {
 			if (newQuantity === 0) {
 				minus.setAttribute('class', 'fa fa-minus cart-button-disable')
 				minus.removeEventListener('click', handleMinus)
+				const cardContainer = document.getElementById(`cardContainer-${pid}`)
+				if (cardContainer) cardContainer.remove()
 			}
 		}
+		setTotalAmount()
     }
 }

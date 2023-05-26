@@ -52,8 +52,15 @@ const handleSort = (e, limit, page) => {
     if (manualChange) window.location.href = `/products?limit=${limit}&page=${page}${link}`
 }
 
-const handleTotalCart = () => {
-    console.log('Hello')
+const handleTotalCart = async (div) => {
+	if (Boolean(div.getAttribute('info'))) return
+	let cart = sessionStorage.getItem('cart')
+    if (cart) {
+		cart = JSON.parse(cart)
+    } else {
+		cart = await postCart(cart)
+    }
+	window.location.href = `/carts/${cart._id}`
 }
 
 const setTotalCartValue = async () => {
@@ -82,10 +89,11 @@ const setTotalCartValue = async () => {
 		}
     })
     const cartLength = document.getElementById('cart-length')
-    cartLength.innerText = cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)
+    if (cartLength) cartLength.innerText = cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)
 }
 
 setTotalCartValue()
+setTotalAmount()
 
 window.addEventListener('load', function () {
     const limitInput = document.getElementById('limit')
