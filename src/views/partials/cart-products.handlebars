@@ -1,5 +1,9 @@
 <div class="cart-total" info="{{isInCart}}" onclick="handleTotalCart(this)">
 	<span id="cart-length"></span>
-	<i class="fa fa-shopping-cart" style="font-size:36px"></i>
+	{{#if isInCart}}
+		<i class="fa fa-shopping-cart" style="font-size:36px"></i>
+	{{else}}
+		<i class="fa fa-shopping-cart cart-cursor" style="font-size:36px"></i>
+	{{/if}}
 	<span id="total"></span>
 </div>
