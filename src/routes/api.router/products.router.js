@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const router = Router()
 const { Products } = require('../../dao/MongoDB')
-const { uploader } = require('../../utils/middleware')
 
 router.post('/', async (req, res, next) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body
@@ -26,10 +25,6 @@ router.post('/', async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-})
-
-router.post('/upload', uploader.single('myFile'), (req, res, next) => {
-    res.send({ status: 'success', message: 'Archivo subido con éxito' })
 })
 
 router.get('/', async (req, res, next) => {
