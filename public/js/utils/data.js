@@ -15,9 +15,11 @@ const setTotalAmount = async () => {
     } else {
 		cart = await postCart(cart)
     }
-	const total = cart?.products?.reduce((acc, curr) => acc + curr.quantity*curr.product.price, 0)
-	span.innerText = `Monto total ${total ? total : 0}`
+	if (span) {
+		const total = cart?.products?.reduce((acc, curr) => acc + curr.quantity*curr.product.price, 0)
+		span.innerText = `Monto total ${total ? total : 0}`
 }
+	}
 
 async function editProductCart(pid, type) {
     let cart = sessionStorage.getItem('cart')

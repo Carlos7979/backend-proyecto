@@ -1,0 +1,14 @@
+.loading-container {
+	height: 100px;
+	width: 100px;
+	position: relative;
+	overflow: hidden;
+}
+
+.loading {
+	position: absolute;
+	height: 200px;
+	border: 1px solid;
+	top: -50px;
+	left: -85px;
+}

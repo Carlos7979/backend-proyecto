@@ -1,11 +1,13 @@
 const { Schema } = require('mongoose')
 
 const users = new Schema({
-	fisrt_name: {
-		type: String
+	first_name: {
+		type: String,
+        required: true
 	},
 	last_name: {
-		type: String
+		type: String,
+        required: true
 	},
     email: {
         type: String,
@@ -21,8 +23,9 @@ const users = new Schema({
             }
         }
     },
-	age: {
-		type: Number
+	date_of_birth: {
+		type: Date,
+        required: true
 	},
 	password: {
 		type: String,

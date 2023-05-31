@@ -10,7 +10,11 @@
 			<div class="cart-icon cart-products">
 				<i class="fa fa-minus cart-button-disable" style="font-size:24px" aria-hidden="true" id="minus-{{product._id}}"></i>
 				<i class="fa fa-shopping-cart" style="font-size:24px"></i>
-				<i class="fa fa-plus cart-button" style="font-size:24px" aria-hidden="true" id="plus-{{product._id}}"></i>
+				{{#if product.stock}}
+					<i class="fa fa-plus cart-button" style="font-size:24px" aria-hidden="true" id="plus-{{product._id}}" stock="{{product.stock}}"></i>
+				{{else}}
+					<i class="fa fa-plus cart-button-disable" style="font-size:24px" aria-hidden="true" id="plus-{{product._id}}"></i>
+				{{/if}}
 			</div>
 			<div id="detail-{{product._id}}" class="card detail" style="background: none;">
 				<ul>

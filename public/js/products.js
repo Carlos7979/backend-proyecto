@@ -97,6 +97,21 @@ setTotalAmount()
 
 window.addEventListener('load', function () {
     const limitInput = document.getElementById('limit')
+	const detail = document.getElementsByClassName('detail')[0]
+	if (detail) {
+		const plus = document.getElementById(`plus-${detail.id.split('-')[1]}`)
+		const stock = plus.getAttribute('stock')
+		if (stock && Number(stock) > 0) {
+			plus.addEventListener('click', handlePlus)
+		}
+		let productsUrl = sessionStorage.getItem('productsUrl')
+		if (productsUrl) {
+			const aProducts = document.getElementById('a-products')
+			aProducts.setAttribute('href', '/products' + productsUrl)
+		}
+	} else {
+		sessionStorage.setItem('productsUrl', window.location.search)
+	}
     if (limitInput) {
         const limit = limitInput.getAttribute('limit')
         const categorySelect = document.getElementById('category')
