@@ -1,3 +1,5 @@
 <div><a href="/profile">Volver a perfil</a></div>
-<div><a id="a-products" href="/products">Volver a productos</a></div>
+{{#unless products}}
+	<div><a id="a-products" href="/products">Volver a productos</a></div>
+{{/unless}}
 <div><a href="/">Cerrar sesión</a></div>
