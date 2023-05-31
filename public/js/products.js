@@ -57,39 +57,35 @@ const handleTotalCart = async (div) => {
 	let cart = sessionStorage.getItem('cart')
     if (cart) {
 		cart = JSON.parse(cart)
-    } else {
-		cart = await postCart(cart)
+		window.location.href = `/carts/${cart._id}`
     }
-	window.location.href = `/carts/${cart._id}`
 }
 
 const setTotalCartValue = async () => {
     let cart = sessionStorage.getItem('cart')
     if (cart) {
         cart = JSON.parse(cart)
-    } else {
-        cart = await postCart(cart)
+		cart?.products?.forEach(e => {
+			const id = e.product._id
+			const stock = e.product.stock
+			const quantity = e.quantity
+			const plus = document.getElementById(`plus-${id}`)
+			if (plus && quantity < stock) plus.addEventListener('click', handlePlus)
+			if (quantity >= stock) {
+				plus.removeEventListener('click', handlePlus)
+				plus.setAttribute('class', 'fa fa-plus cart-button-disable')
+			}
+			const counter = document.getElementById(`counter-${id}`)
+			if (counter) counter.innerText = quantity
+			const minus = document.getElementById(`minus-${id}`)
+			if (minus) {
+				minus.setAttribute('class', 'fa fa-minus cart-button')
+				minus.addEventListener('click', handleMinus)
+			}
+		})
+		const cartLength = document.getElementById('cart-length')
+		if (cartLength) cartLength.innerText = cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)
     }
-    cart?.products?.forEach(e => {
-        const id = e.product._id
-        const stock = e.product.stock
-		const quantity = e.quantity
-		const plus = document.getElementById(`plus-${id}`)
-		if (plus && quantity < stock) plus.addEventListener('click', handlePlus)
-		if (quantity >= stock) {
-			plus.removeEventListener('click', handlePlus)
-			plus.setAttribute('class', 'fa fa-plus cart-button-disable')
-		}
-        const counter = document.getElementById(`counter-${id}`)
-		if (counter) counter.innerText = quantity
-        const minus = document.getElementById(`minus-${id}`)
-		if (minus) {
-			minus.setAttribute('class', 'fa fa-minus cart-button')
-			minus.addEventListener('click', handleMinus)
-		}
-    })
-    const cartLength = document.getElementById('cart-length')
-    if (cartLength) cartLength.innerText = cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)
 }
 
 setTotalCartValue()

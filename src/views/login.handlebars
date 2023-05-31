@@ -1,1 +1,18 @@
 <h2>Accede a tu cuenta</h2>
+{{>landing login='true'}}
+<form action="/api/users/login" method="get" id="login">
+	<div>
+		<label for="email">Correo:</label>
+		<input type="email" name="email" id="email">
+	</div>
+	<div>
+		<label for="password">Contraseña:</label>
+		<input type="password" name="password" id="password">
+		<input type="submit" value="Enviar">
+		<div class="loading-container">
+			<div id="loading"></div>
+		</div>
+	</div>
+</form>
+<div id="login-error"></div>
+<script src="/static/js/login.js"></script>

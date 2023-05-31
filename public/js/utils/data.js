@@ -1,33 +1,22 @@
-async function postCart() {
-    const response = await axios.post('/api/carts', {})
-    if (response?.data?.status === 'success') {
-        const cart = response.data.payload
-        sessionStorage.setItem('cart', JSON.stringify(cart))
-		return cart
-    }
-}
-
 const setTotalAmount = async () => {
 	const span = document.getElementById('total')
 	let cart = sessionStorage.getItem('cart')
     if (cart) {
 		cart = JSON.parse(cart)
-    } else {
-		cart = await postCart(cart)
+		if (span) {
+			const total = cart?.products?.reduce((acc, curr) => acc + curr.quantity*curr.product.price, 0)
+			span.innerText = `Monto total ${total ? total : 0}`
+		}
     }
-	if (span) {
-		const total = cart?.products?.reduce((acc, curr) => acc + curr.quantity*curr.product.price, 0)
-		span.innerText = `Monto total ${total ? total : 0}`
 }
-	}
 
 async function editProductCart(pid, type) {
     let cart = sessionStorage.getItem('cart')
-	if (cart) cart = JSON.parse(cart)
+	if (!cart) return
+	cart = JSON.parse(cart)
 	let product
 	try {
 		product = await axios.get(`/api/products/${pid}`)
-		if (!cart) cart = await postCart(cart)
 	} catch (error) {
 		const { stack, ...rest } = error
 		if (rest) console.log(rest)

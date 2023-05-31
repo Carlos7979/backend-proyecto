@@ -1,0 +1,12 @@
+<ul>
+	{{#unless login}}
+		<li><a href="/login">Acceder a tu cuenta</a></li>
+	{{/unless}}
+	{{#unless register}}
+		<li><a href="/register">Registrarse</a></li>
+	{{/unless}}
+	{{#unless home}}
+		<li><a href="/">Volver a inicio</a></li>
+	{{/unless}}
+</ul>
+<script src="/static/js/home.js"></script>

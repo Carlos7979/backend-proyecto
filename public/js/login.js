@@ -1,15 +1,12 @@
-const form = document.getElementById('register')
+const form = document.getElementById('login')
 form.addEventListener('submit', async e => {
 	e.preventDefault()
-	const { first_name, last_name, email, password, date_of_birth } = e.target
+	const { email, password } = e.target
 	const body = {
-		first_name: first_name.value,
-		last_name: last_name.value,
 		email: email.value,
-		password: password.value,
-		date_of_birth: date_of_birth.value
+		password: password.value
 	}
-	const errorDiv = document.getElementById('register-error')
+	const errorDiv = document.getElementById('login-error')
 	const imgDiv = document.getElementById('loading')
 	if(errorDiv.innerText) errorDiv.innerText = ''
 	try {
@@ -17,15 +14,14 @@ form.addEventListener('submit', async e => {
 		loading.setAttribute('src', '/static/css/loading.gif')
 		loading.setAttribute('class', 'loading')
 		imgDiv.appendChild(loading)
-		const response = await axios.post('/api/users', body)
-		if (response?.data?.payload?.cart) {
-			sessionStorage.setItem('cart', JSON.stringify(response.data.payload.cart))
-			sessionStorage.setItem('user', JSON.stringify(response.data.payload))
+		const response = await axios.post('/api/users/login', body)
+		if (response?.data?.status === 'success') {
 			imgDiv.innerHTML = ''
-			form.reset()
+			sessionStorage.setItem('user', JSON.stringify(response.data.payload))
+			// form.reset()
 			Swal.fire({
 				icon: 'success',
-				title: 'Registro realizado con éxito',
+				title: 'Acceso realizado con éxito',
 				showConfirmButton: false,
 				timer: 1500
 			}).then(() => {
@@ -38,4 +34,8 @@ form.addEventListener('submit', async e => {
 		errorDiv.innerText = error.response.data
 		imgDiv.innerHTML = ''
 	}
+})
+
+window.addEventListener('load', async function () {
+	if (window.location.pathname !== '/login') window.location.href = '/login'
 })
