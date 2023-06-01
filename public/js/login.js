@@ -17,6 +17,7 @@ form.addEventListener('submit', async e => {
 		const response = await axios.post('/api/users/login', body)
 		if (response?.data?.status === 'success') {
 			imgDiv.innerHTML = ''
+			sessionStorage.setItem('cart', JSON.stringify(response.data.payload.cart))
 			sessionStorage.setItem('user', JSON.stringify(response.data.payload))
 			// form.reset()
 			Swal.fire({

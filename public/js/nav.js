@@ -3,8 +3,7 @@ window.addEventListener('load', async function () {
     if (user) {
         user = JSON.parse(user)
         const greeting = document.getElementById('greeting')
-		console.log(user.role);
-        if (greeting) greeting.innerHTML = `Bienvenido(a) ${user.first_name}` + (user.role === 'admin' ? ' (administrador)' : '')
+		if (greeting) greeting.innerHTML = `Bienvenido(a) ${user.first_name}` + (user.role === 'admin' ? ' (administrador)' : ' (usuario)')
     }
 })
 
