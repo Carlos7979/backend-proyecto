@@ -10,6 +10,6 @@ const {
 ;(async () => {
     await connect(url, { useNewUrlParser: true })
     app.listen(port, () => {
-        console.log(`Backend app listening on port ${port}`)
+        console.log(`Backend app listening on port ${port}\nhttp://localhost:${port}`)
     })
 })()
