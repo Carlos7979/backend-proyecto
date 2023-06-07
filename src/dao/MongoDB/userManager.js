@@ -46,8 +46,10 @@ class UserManager {
     async getUserByEmail(email) {
 		try {
 			emailValidate(email)
-            const user = await Users.findOne({ email })
+            let user = await Users.findOne({ email })
             if (!user) return 'Not found'
+			user = await Carts.populate(user, { path: 'cart' })
+			user = await Carts.populate(user, { path: 'cart.products.product' })
 			return user
         } catch (error) {
             console.log(error)

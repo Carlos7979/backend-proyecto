@@ -24,7 +24,7 @@ async function editProductCart(pid, type) {
 	}
 	if (product?.data?.status !== 'success') return
 	const stock = product.data.payload.stock
-	const products = cart.products.find(e => e.product._id === pid)
+	const products = cart.products?.find(e => e.product._id === pid)
 	const quantity = products?.quantity ? products?.quantity : 0
 	let addedProducts
 	const card = document.getElementById(pid)
@@ -56,7 +56,7 @@ async function editProductCart(pid, type) {
 		const counter = document.getElementById(`counter-${pid}`)
 		const minus = document.getElementById(`minus-${pid}`)
 		const plus = document.getElementById(`plus-${pid}`)
-		const productContainer = updatedCart.products.find(e => e.product._id === pid)
+		const productContainer = updatedCart?.products.find(e => e.product._id === pid)
 		const newQuantity = productContainer?.quantity ? productContainer?.quantity : 0
 		counter.innerText = newQuantity
 		if (type === 'plus') {

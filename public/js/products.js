@@ -52,39 +52,50 @@ const handleSort = (e, limit, page) => {
     if (manualChange) window.location.href = `/products?limit=${limit}&page=${page}${link}`
 }
 
-const handleTotalCart = async (div) => {
-	if (Boolean(div.getAttribute('info'))) return
-	let cart = sessionStorage.getItem('cart')
+const handleTotalCart = async div => {
+    if (Boolean(div.getAttribute('info'))) return
+    let cart = sessionStorage.getItem('cart')
     if (cart) {
-		cart = JSON.parse(cart)
-		window.location.href = `/carts/${cart._id}`
+        cart = JSON.parse(cart)
+        window.location.href = `/carts/${cart._id}`
     }
 }
 
 const setTotalCartValue = async () => {
     let cart = sessionStorage.getItem('cart')
-    if (cart) {
+    if (cart && cart !== 'undefined') {
+        console.log(cart)
         cart = JSON.parse(cart)
-		cart?.products?.forEach(e => {
-			const id = e.product._id
-			const stock = e.product.stock
-			const quantity = e.quantity
-			const plus = document.getElementById(`plus-${id}`)
-			if (plus && quantity < stock) plus.addEventListener('click', handlePlus)
-			if (quantity >= stock) {
-				plus.removeEventListener('click', handlePlus)
-				plus.setAttribute('class', 'fa fa-plus cart-button-disable')
+		console.log(cart)
+        cart?.products?.forEach(e => {
+            const id = e.product._id
+            const stock = e.product.stock
+            const quantity = e.quantity
+			console.log(quantity);
+            const plus = document.getElementById(`plus-${id}`)
+            if (plus && quantity < stock) plus.addEventListener('click', handlePlus)
+            if (quantity >= stock) {
+                plus.removeEventListener('click', handlePlus)
+                plus.setAttribute('class', 'fa fa-plus cart-button-disable')
+            }
+            const counter = document.getElementById(`counter-${id}`)
+			if (quantity) {
+				console.log(counter);
+				console.log(e);
+				console.log(stock);
 			}
-			const counter = document.getElementById(`counter-${id}`)
-			if (counter) counter.innerText = quantity
-			const minus = document.getElementById(`minus-${id}`)
-			if (minus) {
-				minus.setAttribute('class', 'fa fa-minus cart-button')
-				minus.addEventListener('click', handleMinus)
-			}
-		})
-		const cartLength = document.getElementById('cart-length')
-		if (cartLength) cartLength.innerText = cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)
+            if (counter) counter.innerText = quantity
+            const minus = document.getElementById(`minus-${id}`)
+            if (minus) {
+                minus.setAttribute('class', 'fa fa-minus cart-button')
+                minus.addEventListener('click', handleMinus)
+            }
+        })
+        const cartLength = document.getElementById('cart-length')
+        if (cartLength)
+            cartLength.innerText = cart?.products
+                ? cart?.products?.reduce((acc, curr) => acc + curr.quantity, 0)
+                : 0
     }
 }
 
@@ -93,21 +104,21 @@ setTotalAmount()
 
 window.addEventListener('load', function () {
     const limitInput = document.getElementById('limit')
-	const detail = document.getElementsByClassName('detail')[0]
-	if (detail) {
-		const plus = document.getElementById(`plus-${detail.id.split('-')[1]}`)
-		const stock = plus.getAttribute('stock')
-		if (stock && Number(stock) > 0) {
-			plus.addEventListener('click', handlePlus)
-		}
-		let productsUrl = sessionStorage.getItem('productsUrl')
-		if (productsUrl) {
-			const aProducts = document.getElementById('a-products')
-			aProducts.setAttribute('href', '/products' + productsUrl)
-		}
-	} else {
-		sessionStorage.setItem('productsUrl', window.location.search)
-	}
+    const detail = document.getElementsByClassName('detail')[0]
+    if (detail) {
+        const plus = document.getElementById(`plus-${detail.id.split('-')[1]}`)
+        const stock = plus.getAttribute('stock')
+        if (stock && Number(stock) > 0) {
+            plus.addEventListener('click', handlePlus)
+        }
+        let productsUrl = sessionStorage.getItem('productsUrl')
+        if (productsUrl) {
+            const aProducts = document.getElementById('a-products')
+            aProducts.setAttribute('href', '/products' + productsUrl)
+        }
+    } else {
+        sessionStorage.setItem('productsUrl', window.location.search)
+    }
     if (limitInput) {
         const limit = limitInput.getAttribute('limit')
         const categorySelect = document.getElementById('category')
