@@ -64,14 +64,11 @@ const handleTotalCart = async div => {
 const setTotalCartValue = async () => {
     let cart = sessionStorage.getItem('cart')
     if (cart && cart !== 'undefined') {
-        console.log(cart)
         cart = JSON.parse(cart)
-		console.log(cart)
         cart?.products?.forEach(e => {
             const id = e.product._id
             const stock = e.product.stock
             const quantity = e.quantity
-			console.log(quantity);
             const plus = document.getElementById(`plus-${id}`)
             if (plus && quantity < stock) plus.addEventListener('click', handlePlus)
             if (quantity >= stock) {
@@ -79,11 +76,6 @@ const setTotalCartValue = async () => {
                 plus.setAttribute('class', 'fa fa-plus cart-button-disable')
             }
             const counter = document.getElementById(`counter-${id}`)
-			if (quantity) {
-				console.log(counter);
-				console.log(e);
-				console.log(stock);
-			}
             if (counter) counter.innerText = quantity
             const minus = document.getElementById(`minus-${id}`)
             if (minus) {
