@@ -1,4 +1,4 @@
-const { emailValidate, idMongodb } = require('../../utils/controller/validate')
+const { validate: { emailValidate, idMongodb } } = require('../../utils/controller')
 const { Users, Carts } = require('./models')
 
 class UserManager {

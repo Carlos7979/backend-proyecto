@@ -1,7 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 const { Users } = require('../../dao/MongoDB')
-const { emailValidate } = require('../../utils/controller/validate')
+const { validate: { emailValidate } } = require('../../utils/controller')
+const { hash: { createHash, isValidPassword } } = require('../../utils/controller')
 const adminUser = {
 	_id: '6477f88b7fff754486aaa903',
 	first_name: 'Coder',
@@ -23,7 +24,7 @@ router.post('/', async (req, res, next) => {
             throw new Error('Todos los campos son obligatorios')
         }
         emailValidate(email)
-        const user = await Users.addUser({ first_name, last_name, email, password, date_of_birth })
+        const user = await Users.addUser({ first_name, last_name, email, password: createHash(password), date_of_birth })
         if (user === 'Todos los campos son obligatorios')
             throw new Error('Todos los campos son obligatorios')
         if (user === 'Error al crear carrito de compras')
@@ -46,9 +47,9 @@ router.post('/login', async (req, res, next) => {
 			return res.send({ status: 'success', payload: adminUser })
 		}
         const user = await Users.getUserByEmail(email)
-        if (user === 'Not found')
+		if (user === 'Not found')
             throw new Error(`El usuario con el email ${email} no se encuentra registrado.`)
-        if (user.password !== password) throw new Error('La contraseña proporcionada es incorrecta')
+        if (!isValidPassword(user, password)) throw { message: 'La contraseña proporcionada es incorrecta', status: 401 }
         req.session.user = user._id
         res.send({ status: 'success', payload: user })
     } catch (error) {
