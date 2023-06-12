@@ -1,69 +1,34 @@
 const { Router } = require('express')
 const router = Router()
 const { Users } = require('../../dao/MongoDB')
-const { validate: { emailValidate } } = require('../../utils/controller')
-const { hash: { createHash, isValidPassword } } = require('../../utils/controller')
-const adminUser = {
-	_id: '6477f88b7fff754486aaa903',
-	first_name: 'Coder',
-	last_name: 'House',
-	email: 'adminCoder@coder.com',
-	date_of_birth: new Date("2023-05-31T00:00:00.000+00:00"),
-	cart: {
-		_id: "6477f993a6577cddb8e09cf5",
-		products: [],
-	},
-	role: 'admin'
+const passport = require('passport')
 
-}
-
-router.post('/', async (req, res, next) => {
-    const { first_name, last_name, email, password, date_of_birth } = req.body
-    try {
-        if (!first_name || !last_name || !email || !password || !date_of_birth) {
-            throw new Error('Todos los campos son obligatorios')
-        }
-        emailValidate(email)
-        const user = await Users.addUser({ first_name, last_name, email, password: createHash(password), date_of_birth })
-        if (user === 'Todos los campos son obligatorios')
-            throw new Error('Todos los campos son obligatorios')
-        if (user === 'Error al crear carrito de compras')
-            throw new Error('Error al crear carrito de compras')
-        if (user === 'Correo ya registrado') throw new Error('Correo ya registrado')
-		req.session.user = user._id
-        res.send({ status: 'success', payload: user })
-    } catch (error) {
-        next(error)
-    }
+router.post('/', passport.authenticate('register', { failureRedirect: '/api/users/failregister' }), (req, res) => {
+	res.send({ status: 'success', payload: req.user })
 })
 
-router.post('/login', async (req, res, next) => {
-    const { email, password } = req.body
-    try {
-        emailValidate(email)
-        if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-			// id generated on https://observablehq.com/@hugodf/mongodb-objectid-generator
-			req.session.user = '6477f88b7fff754486aaa903'
-			return res.send({ status: 'success', payload: adminUser })
-		}
-        const user = await Users.getUserByEmail(email)
-		if (user === 'Not found')
-            throw new Error(`El usuario con el email ${email} no se encuentra registrado.`)
-        if (!isValidPassword(user, password)) throw { message: 'La contraseña proporcionada es incorrecta', status: 401 }
-        req.session.user = user._id
-        res.send({ status: 'success', payload: user })
-    } catch (error) {
-        next(error)
-    }
+router.get('failregister', async (req, res) => {
+	console.log('Failed Strategy')
+	res.send({ error: 'Failed' })
+})
+
+router.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), async (req, res) => {
+	if (!req.user) return res.status(400).send({ status: 'error', error: 'Invalid credentials' })
+	res.send({ status: 'success', payload: req.user })
+})
+
+router.get('faillogin', async (req, res) => {
+	console.log('Failed login strategy')
+	res.send({ error: 'Failed login' })
 })
 
 router.get('/isLogged', async (req, res, next) => {
     try {
-        if (!req.session.user) return res.send({ status: 'fail' })
-		if (req.session.user === '6477f88b7fff754486aaa903') {
+		if (!req.session.passport?.user) return res.send({ status: 'fail' })
+		if (req.session.passport?.user === '6477f88b7fff754486aaa903') {
 			res.send({ status: 'success', payload: adminUser })
 		}
-        const user = await Users.getUserById(req.session.user)
+        const user = await Users.getUserById(req.session.passport?.user)
         res.send({ status: 'success', payload: user })
     } catch (error) {
         next(error)

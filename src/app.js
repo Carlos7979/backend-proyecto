@@ -6,6 +6,9 @@ const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
 const session = require('express-session')
 const mongoStorage = require('connect-mongo')
+const passport = require('passport')
+const { initializePassport } = require('./config')
+
 require('dotenv').config()
 const {
     env: { SECRET, MONGO_URL: url },
@@ -35,6 +38,9 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 // routes
 app.use('/', routes)
