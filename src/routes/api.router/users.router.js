@@ -3,23 +3,38 @@ const router = Router()
 const { Users } = require('../../dao/MongoDB')
 const passport = require('passport')
 
-router.post('/', passport.authenticate('register', { failureRedirect: '/api/users/failregister' }), (req, res) => {
+router.post('/', passport.authenticate('register', { failureRedirect: 'failregister' }), (req, res) => {
 	res.send({ status: 'success', payload: req.user })
 })
 
-router.get('failregister', async (req, res) => {
+router.get('/failregister', async (req, res) => {
 	console.log('Failed Strategy')
 	res.send({ error: 'Failed' })
 })
 
-router.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), async (req, res) => {
+router.post('/login', passport.authenticate('login', { failureRedirect: 'faillogin' }), async (req, res) => {
 	if (!req.user) return res.status(400).send({ status: 'error', error: 'Invalid credentials' })
 	res.send({ status: 'success', payload: req.user })
 })
 
-router.get('faillogin', async (req, res) => {
+router.get('/faillogin', async (req, res) => {
 	console.log('Failed login strategy')
 	res.send({ error: 'Failed login' })
+})
+
+router.get('/github', passport.authenticate('github', { failureRedirect: 'failgithub',
+failureFlash: true,
+session: false, }))
+
+router.get('/failgithub', async (req, res) => {
+	console.log('Failed login strategy')
+	res.send({ error: 'Failed login' })
+})
+
+router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res, next) => {
+	if (!req.user) return res.status(400).send({ status: 'error', error: 'Invalid credentials' })
+	// res.send({ status: 'success', payload: req.user })
+	res.redirect('/products')
 })
 
 router.get('/isLogged', async (req, res, next) => {

@@ -1,5 +1,6 @@
 const passport = require('passport')
 const { Strategy: LocalStrategy } = require('passport-local')
+const GithubStrategy = require('passport-github2')
 const { Users } = require('../dao/MongoDB')
 const {
     hash: { createHash, isValidPassword }
@@ -8,6 +9,10 @@ const {
     validate: { emailValidate }
 } = require('../utils/controller')
 const adminUser = require('./adminUser')
+require('dotenv').config()
+const {
+    env: { CLIENT_ID: clientID, CLIENT_SECRET: clientSecret, CALLBACK_URL: callbackURL }
+} = process
 
 const initializePassport = () => {
     // Passport utiliza sus propios middleares
@@ -71,6 +76,49 @@ const initializePassport = () => {
                         )
                     if (!isValidPassword(user, password))
                         throw { message: 'La contraseña proporcionada es incorrecta', status: 401 }
+                    return done(null, user)
+                } catch (error) {
+                    return done(error)
+                }
+            }
+        )
+    )
+
+    passport.use(
+        'github',
+        new GithubStrategy(
+            {
+                clientID,
+                clientSecret,
+                callbackURL,
+                scope: ['user:email']
+            },
+            async (accessToken, refreshToken, profile, done) => {
+                try {
+                    if (!profile.hasOwnProperty('emails'))
+                        throw new Error('Es requerido un correo electrónico')
+                    const names = profile._json.name.split(' ')
+                    const id = profile.id
+                    let first_name, last_name
+                    if (Array.isArray(names)) {
+                        first_name = names[0] ? names[0] : id
+                        last_name = names[1] ? names[1] : id
+                    }
+                    const email = profile.emails[0]?.value
+                    let user = await Users.getUserByEmail(email)
+                    if (user === 'Not found') {
+                        user = await Users.addUser({
+                            first_name,
+                            last_name,
+                            email,
+                            password: createHash(refreshToken),
+                            date_of_birth: new Date(Date.now())
+                        })
+                        if (user === 'Todos los campos son obligatorios')
+                            throw new Error('Todos los campos son obligatorios')
+                        if (user === 'Error al crear carrito de compras')
+                            throw new Error('Error al crear carrito de compras')
+                    }
                     return done(null, user)
                 } catch (error) {
                     return done(error)

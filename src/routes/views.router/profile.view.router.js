@@ -17,10 +17,10 @@ const adminUser = {
 
 router.get('/', async (req, res, next) => {
     try {
-		if (req.session.user === '6477f88b7fff754486aaa903') {
+		if (req.session.passport.user === '6477f88b7fff754486aaa903') {
 			return res.render('profile', { user: adminUser })
 		}
-		const user = await Users.getUserById(req.session.user)
+		const user = await Users.getUserById(req.session.passport.user)
 		res.render('profile', {user})
     } catch (error) {
         next(error)

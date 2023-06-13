@@ -2,9 +2,15 @@ window.addEventListener('load', async function () {
     let user = sessionStorage.getItem('user')
     if (user) {
         user = JSON.parse(user)
-        const greeting = document.getElementById('greeting')
-		if (greeting) greeting.innerHTML = `Bienvenido(a) ${user.first_name}` + (user.role === 'admin' ? ' (administrador)' : ' (usuario)')
-    }
+    } else {
+		const { data } = await axios.get(`/api/users/isLogged`)
+		if (data?.status === 'success') {
+			user = data.payload
+			sessionStorage.setItem('user', JSON.stringify(user))
+		}
+	}
+	const greeting = document.getElementById('greeting')
+	if (greeting) greeting.innerHTML = `Bienvenido(a) ${user.first_name}` + (user.role === 'admin' ? ' (administrador)' : ' (usuario)')
 })
 
 const logout = document.getElementById('logout')
