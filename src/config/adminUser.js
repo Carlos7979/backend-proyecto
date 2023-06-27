@@ -1,4 +1,5 @@
 const adminUser = {
+	// id generated on https://observablehq.com/@hugodf/mongodb-objectid-generator
 	_id: '6477f88b7fff754486aaa903',
 	first_name: 'Coder',
 	last_name: 'House',

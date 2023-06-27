@@ -1,81 +1,43 @@
 const passport = require('passport')
-const { Strategy: LocalStrategy } = require('passport-local')
 const GithubStrategy = require('passport-github2')
-const { Users } = require('../dao/MongoDB')
+const jwt = require('passport-jwt')
+const { Users, Carts } = require('../dao/MongoDB')
 const {
-    hash: { createHash, isValidPassword }
+    hash: { createHash }
 } = require('../utils/controller')
 const {
-    validate: { emailValidate }
+    jwt: { cookieExtractor }
 } = require('../utils/controller')
 const adminUser = require('./adminUser')
 require('dotenv').config()
 const {
-    env: { CLIENT_ID: clientID, CLIENT_SECRET: clientSecret, CALLBACK_URL: callbackURL }
+    env: {
+        CLIENT_ID: clientID,
+        CLIENT_SECRET: clientSecret,
+        CALLBACK_URL: callbackURL,
+        JWT_SECRET: secret
+    }
 } = process
+const JWTStrategy = jwt.Strategy
+const ExtractJWT = jwt.ExtractJwt
 
 const initializePassport = () => {
-    // Passport utiliza sus propios middleares
-    // Iniciaremos la estrategia local
-    /**
-     * username será en este caso el correo
-     * done será el callback de resolución  de passport, el primer argumento es para error y el segundo para el usuario
-     */
     passport.use(
-        'register',
-        new LocalStrategy(
+        'jwt',
+        new JWTStrategy(
             {
-                passReqToCallback: true,
-                usernameField: 'email'
+                jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+                secretOrKey: secret
             },
-            async (req, username, password, done) => {
-                // passport doesn't allow executed this middleware without username nor password
-                const { first_name, last_name, date_of_birth } = req.body
+            async (jwt_payload, done) => {
                 try {
-                    if (!first_name || !last_name || !date_of_birth) {
-                        throw new Error('Todos los campos son obligatorios')
+                    if (!jwt_payload.sub) return done(null, false, { message: 'No authorized' } )
+                    if (jwt_payload.sub === '6477f88b7fff754486aaa903') {
+						return done(null, adminUser)
                     }
-                    emailValidate(username)
-                    const user = await Users.addUser({
-                        first_name,
-                        last_name,
-                        email: username,
-                        password: createHash(password),
-                        date_of_birth
-                    })
-                    if (user === 'Todos los campos son obligatorios')
-                        throw new Error('Todos los campos son obligatorios')
-                    if (user === 'Error al crear carrito de compras')
-                        throw new Error('Error al crear carrito de compras')
-                    if (user === 'Correo ya registrado') throw new Error('Correo ya registrado')
-                    return done(null, user)
-                } catch (error) {
-                    return done(error)
-                }
-            }
-        )
-    )
-
-    passport.use(
-        'login',
-        new LocalStrategy(
-            {
-                usernameField: 'email'
-            },
-            async (username, password, done) => {
-                try {
-                    emailValidate(username)
-                    if (username === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-                        // id generated on https://observablehq.com/@hugodf/mongodb-objectid-generator
-                        return done(null, adminUser)
-                    }
-                    const user = await Users.getUserByEmail(username)
-                    if (user === 'Not found')
-                        throw new Error(
-                            `El usuario con el email ${username} no se encuentra registrado.`
-                        )
-                    if (!isValidPassword(user, password))
-                        throw { message: 'La contraseña proporcionada es incorrecta', status: 401 }
+                    const user = await Users.getUserById(jwt_payload.sub)
+                    const cart = await Carts.getProductsByCartId(user.cart)
+                    if (cart) user.cart = cart
                     return done(null, user)
                 } catch (error) {
                     return done(error)
@@ -126,15 +88,6 @@ const initializePassport = () => {
             }
         )
     )
-
-    passport.serializeUser((user, done) => {
-        done(null, user._id)
-    })
-
-    passport.deserializeUser(async (id, done) => {
-        const user = await Users.getUserById(id)
-        done(null, user)
-    })
 }
 
 module.exports = initializePassport

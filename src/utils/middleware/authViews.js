@@ -5,26 +5,25 @@ const {
     env: { JWT_SECRET }
 } = process
 
-const auth = async (req, res, next) => {
+const authViews = async (req, res, next) => {
 	let token = null
     try {
-		if (!Object.keys(req.cookies).length) {
-			throw { status: 401, message: 'No autenticado' }
-		}
+		if (!Object.keys(req.cookies).length) return res.render('login', {})
 		if (req && req.cookies) token = req.cookies['coderToken']
+
         const { sub } = jwt.verify(token, JWT_SECRET)
 
-		if (!sub) throw { status: 403, message: 'No autorizado' }
+		if (!sub) return res.render('login', {})
 
         const userFound = await Users.getUserById(sub)
-        if (!userFound) throw { status: 403, message: 'No autorizado' }
+
+        if (!userFound) return res.render('login', {})
 
         req.user = sub
-
         next()
     } catch (error) {
         next(error)
     }
 }
 
-module.exports = auth
+module.exports = authViews

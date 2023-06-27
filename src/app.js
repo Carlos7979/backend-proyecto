@@ -4,15 +4,8 @@ const routes = require('./routes')
 const handlebars = require('express-handlebars')
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
-const session = require('express-session')
-const mongoStorage = require('connect-mongo')
 const passport = require('passport')
 const { initializePassport } = require('./config')
-
-require('dotenv').config()
-const {
-    env: { SECRET, MONGO_URL: url },
-} = process
 
 // handlebars
 app.engine('handlebars', handlebars.engine())
@@ -25,22 +18,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(morgan('dev'))
 app.use('/static', express.static('public'))
-app.use(session({
-	store: mongoStorage.create({
-		mongoUrl: url,
-		mongoOptions: {
-			useNewUrlParser: true,
-			useUnifiedTopology: true
-		},
-		ttl: 600
-	}),
-	secret: SECRET,
-	resave: false,
-	saveUninitialized: false
-}))
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
 
 // routes
 app.use('/', routes)

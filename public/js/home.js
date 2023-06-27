@@ -1,9 +1,13 @@
 window.addEventListener('load', async function () {
+	let user = sessionStorage.getItem('user')
 	try {
-		const { data } = await axios.get(`/api/users/isLogged`)
-		if (data?.status === 'success') {
-			sessionStorage.setItem('user', JSON.stringify(data.payload))
-			window.location.href = '/profile'
+		if (user) {
+			user = JSON.parse(user)
+			const { data } = await axios.get('/api/sessions/current')
+			if (data?.status === 'success') {
+				window.location.href = '/profile'
+				return
+			}
 		}
 	} catch (error) {
 		const { stack, ...rest } = error
