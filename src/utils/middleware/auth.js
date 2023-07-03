@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { Users } = require('../../dao/MongoDB')
-require('dotenv').config()
-const {
-    env: { JWT_SECRET }
-} = process
+const { env: { JWT_SECRET } } = require('../../config')
 
 const auth = async (req, res, next) => {
 	let token = null

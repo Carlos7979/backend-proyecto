@@ -9,15 +9,12 @@ const {
     jwt: { cookieExtractor }
 } = require('../utils/controller')
 const adminUser = require('./adminUser')
-require('dotenv').config()
 const {
-    env: {
-        CLIENT_ID: clientID,
-        CLIENT_SECRET: clientSecret,
-        CALLBACK_URL: callbackURL,
-        JWT_SECRET: secret
-    }
-} = process
+	CLIENT_ID: clientID,
+	CLIENT_SECRET: clientSecret,
+	CALLBACK_URL: callbackURL,
+	JWT_SECRET: secret
+} = require('./config')
 const JWTStrategy = jwt.Strategy
 const ExtractJWT = jwt.ExtractJwt
 

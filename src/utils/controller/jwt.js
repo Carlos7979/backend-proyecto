@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken')
-require('dotenv').config()
-const {
-    env: { JWT_SECRET }
-} = process
+const { JWT_SECRET } = require('../../config/config')
+// const { env: { JWT_SECRET } } = require('../../config')
 
 const generateToken = userId => {
     return jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: '12h' })
