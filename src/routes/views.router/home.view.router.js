@@ -1,8 +1,7 @@
 const { Router } = require('express')
+const { viewController: { homeView } } = require('../../services')
 const router = Router()
 
-router.get('/', (req, res, next) => {
-    res.render('home', {})
-})
+router.get('/', homeView)
 
 module.exports = router

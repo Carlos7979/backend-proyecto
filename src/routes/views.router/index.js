@@ -8,7 +8,7 @@ const login = require('./login.view.router')
 const register = require('./register.view.router')
 const profile = require('./profile.view.router')
 const home = require('./home.view.router')
-const { authViews } = require('../../utils/middleware')
+const { authViews } = require('../../middleware')
 
 // Configurar los routers
 router.use('/products', authViews, products)

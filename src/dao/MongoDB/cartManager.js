@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose')
+// const { default: mongoose } = require('mongoose')
 const { Carts } = require('./models')
 
 class CartManager {
@@ -29,28 +29,34 @@ class CartManager {
                     quantity: 1
                 })
             }
-            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true })
+                .populate('products.product')
+                .select('-__v')
+                .lean()
             return response
         } catch (error) {
             console.log(error)
         }
     }
-	async deleteProducts(cid) {
+    async deleteProducts(cid) {
         try {
             const cart = await Carts.findById(cid).select('-__v').lean()
             if (!cart) return 'Not found'
             if (cart.products.length > 0) {
                 cart.products = []
             } else {
-				return 'Products empty'
-			}
-            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+                return 'Products empty'
+            }
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true })
+                .populate('products.product')
+                .select('-__v')
+                .lean()
             return response
         } catch (error) {
             console.log(error)
         }
     }
-	async deleteProduct(cid, pid) {
+    async deleteProduct(cid, pid) {
         try {
             const cart = await Carts.findById(cid).select('-__v').lean()
             if (!cart) return 'Cart not found'
@@ -66,15 +72,18 @@ class CartManager {
             } else if (cartProduct && cart.products[productIndex].quantity === 1) {
                 cart.products.splice(productIndex, 1)
             } else {
-				return 'Product empty'
-			}
-            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+                return 'Product empty'
+            }
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true })
+                .populate('products.product')
+                .select('-__v')
+                .lean()
             return response
         } catch (error) {
             console.log(error)
         }
     }
-	async updateProduct(cid, pid, quantity) {
+    async updateProduct(cid, pid, quantity) {
         try {
             const cart = await Carts.findById(cid).select('-__v').lean()
             if (!cart) return 'Cart not found'
@@ -88,9 +97,12 @@ class CartManager {
             if (cartProduct) {
                 cart.products[productIndex].quantity = quantity
             } else {
-				return 'Product empty'
-			}
-            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true }).populate('products.product').select('-__v').lean()
+                return 'Product empty'
+            }
+            const response = await Carts.findByIdAndUpdate(cid, cart, { new: true })
+                .populate('products.product')
+                .select('-__v')
+                .lean()
             return response
         } catch (error) {
             console.log(error)
@@ -98,20 +110,23 @@ class CartManager {
     }
     async getProductsByCartId(cid) {
         try {
-            const cart = await Carts.findById(cid).select('-__v').lean().populate('products.product')
+            const cart = await Carts.findById(cid)
+                .select('-__v')
+                .lean()
+                .populate('products.product')
             if (!cart) return 'Cart not found'
-			// const cart = await Carts.aggregate([
-			// 	{
-			// 		$match: { _id: new mongoose.Types.ObjectId(cid) }
-			// 	},
-			// 	{
-			// 		$project: {_id: 0, totalQuantity: { $sum: '$products.quantity' }, products: '$products' }
-			// 	}
-			// ])
-			// if (cart.length === 0) return 'Not found'
-			// const products = await Carts.populate(cart, { path: 'products.product' })
-			// return products
-			return cart
+            // const cart = await Carts.aggregate([
+            // 	{
+            // 		$match: { _id: new mongoose.Types.ObjectId(cid) }
+            // 	},
+            // 	{
+            // 		$project: {_id: 0, totalQuantity: { $sum: '$products.quantity' }, products: '$products' }
+            // 	}
+            // ])
+            // if (cart.length === 0) return 'Not found'
+            // const products = await Carts.populate(cart, { path: 'products.product' })
+            // return products
+            return cart
         } catch (error) {
             console.log(error)
         }

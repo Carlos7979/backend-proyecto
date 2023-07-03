@@ -1,12 +1,7 @@
 const { Router } = require('express')
+const { viewController: { profileView } } = require('../../services')
 const router = Router()
 
-router.get('/', async (req, res, next) => {
-    try {
-		res.render('profile', {})
-    } catch (error) {
-        next(error)
-    }
-})
+router.get('/', profileView)
 
 module.exports = router

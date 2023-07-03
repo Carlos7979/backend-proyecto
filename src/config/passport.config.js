@@ -4,16 +4,16 @@ const jwt = require('passport-jwt')
 const { Users, Carts } = require('../dao/MongoDB')
 const {
     hash: { createHash }
-} = require('../utils/controller')
+} = require('../utils')
 const {
     jwt: { cookieExtractor }
-} = require('../utils/controller')
+} = require('../utils')
 const adminUser = require('./adminUser')
 const {
-	CLIENT_ID: clientID,
-	CLIENT_SECRET: clientSecret,
-	CALLBACK_URL: callbackURL,
-	JWT_SECRET: secret
+    CLIENT_ID: clientID,
+    CLIENT_SECRET: clientSecret,
+    CALLBACK_URL: callbackURL,
+    JWT_SECRET: secret
 } = require('./config')
 const JWTStrategy = jwt.Strategy
 const ExtractJWT = jwt.ExtractJwt
@@ -28,9 +28,9 @@ const initializePassport = () => {
             },
             async (jwt_payload, done) => {
                 try {
-                    if (!jwt_payload.sub) return done(null, false, { message: 'No authorized' } )
+                    if (!jwt_payload.sub) return done(null, false, { message: 'No authorized' })
                     if (jwt_payload.sub === '6477f88b7fff754486aaa903') {
-						return done(null, adminUser)
+                        return done(null, adminUser)
                     }
                     const user = await Users.getUserById(jwt_payload.sub)
                     const cart = await Carts.getProductsByCartId(user.cart)

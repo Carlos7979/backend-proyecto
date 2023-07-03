@@ -1,12 +1,7 @@
 const { Router } = require('express')
+const { viewController: { registerView } } = require('../../services')
 const router = Router()
 
-router.get('/', async (req, res, next) => {
-    try {
-		res.render('register', {})
-    } catch (error) {
-        next(error)
-    }
-})
+router.get('/', registerView)
 
 module.exports = router
