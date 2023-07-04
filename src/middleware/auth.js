@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { Users } = require('../dao/MongoDB')
+const { userManager } = require('../dao/MongoDB')
 const { env: { JWT_SECRET } } = require('../config')
 
 const auth = async (req, res, next) => {
@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
 
 		if (!sub) throw { status: 403, message: 'No autorizado' }
 
-        const userFound = await Users.getUserById(sub)
+        const userFound = await userManager.getUserById(sub)
         if (!userFound) throw { status: 403, message: 'No autorizado' }
 
         req.user = sub

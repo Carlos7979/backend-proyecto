@@ -1,7 +1,7 @@
 const passport = require('passport')
 const GithubStrategy = require('passport-github2')
 const jwt = require('passport-jwt')
-const { Users, Carts } = require('../dao/MongoDB')
+const { userManager, cartManager } = require('../dao/MongoDB')
 const {
     hash: { createHash }
 } = require('../utils')
@@ -32,8 +32,8 @@ const initializePassport = () => {
                     if (jwt_payload.sub === '6477f88b7fff754486aaa903') {
                         return done(null, adminUser)
                     }
-                    const user = await Users.getUserById(jwt_payload.sub)
-                    const cart = await Carts.getProductsByCartId(user.cart)
+                    const user = await userManager.getUserById(jwt_payload.sub)
+                    const cart = await cartManager.getProductsByCartId(user.cart)
                     if (cart) user.cart = cart
                     return done(null, user)
                 } catch (error) {
@@ -64,9 +64,9 @@ const initializePassport = () => {
                         last_name = names[1] ? names[1] : id
                     }
                     const email = profile.emails[0]?.value
-                    let user = await Users.getUserByEmail(email)
+                    let user = await userManager.getUserByEmail(email)
                     if (user === 'Not found') {
-                        user = await Users.addUser({
+                        user = await userManager.addUser({
                             first_name,
                             last_name,
                             email,

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { Users } = require('../dao/MongoDB')
+const { userManager } = require('../dao/MongoDB')
 const { env: { JWT_SECRET } } = require('../config')
 
 const authViews = async (req, res, next) => {
@@ -12,7 +12,7 @@ const authViews = async (req, res, next) => {
 
 		if (!sub) return res.render('login', {})
 
-        const userFound = await Users.getUserById(sub)
+        const userFound = await userManager.getUserById(sub)
 
         if (!userFound) return res.render('login', {})
 

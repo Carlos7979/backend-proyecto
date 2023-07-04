@@ -1,4 +1,4 @@
-const { Products } = require("../dao/MongoDB")
+const { productManager } = require("../dao/MongoDB")
 
 class ProductController {
 	createProduct = async (req, res, next) => {
@@ -6,7 +6,7 @@ class ProductController {
 		if (!title || !description || !code || !price || (status === false ? status : !status) || (stock === 0 ? false : !stock) || !category)
 			return res.status(400).send({ status: 'error', error: 'Todos los campos son obligatorios' })
 		try {
-			const product = await Products.addProduct(
+			const product = await productManager.addProduct(
 				title,
 				description,
 				code,
@@ -50,7 +50,7 @@ class ProductController {
 			sortLink += `&sort=${sort}`
 		}
 		try {
-			const paginatedProducts = await Products.getPaginatedProducts(limit, page, sort, query)
+			const paginatedProducts = await productManager.getPaginatedProducts(limit, page, sort, query)
 			const {docs, ...rest} = paginatedProducts
 			const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
 			const prevLink = hasPrevPage ? '/api/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink + sortLink : null
@@ -64,7 +64,7 @@ class ProductController {
 	getOneProduct = async (req, res, next) => {
 		try {
 			let { pid } = req.params
-			const product = await Products.getProductById(pid)
+			const product = await productManager.getProductById(pid)
 			if (product === 'Not found') {
 				return res
 					.status(400)
@@ -79,7 +79,7 @@ class ProductController {
 	updateProduct = async (req, res, next) => {
 		try {
 			let { pid } = req.params
-			const product = await Products.updateProduct(pid, req.body)
+			const product = await productManager.updateProduct(pid, req.body)
 			if (product === 'Not found') {
 				return res
 					.status(400)
@@ -99,7 +99,7 @@ class ProductController {
 	deleteProduct = async (req, res, next) => {
 		try {
 			let { pid } = req.params
-			const product = await Products.deleteProduct(pid)
+			const product = await productManager.deleteProduct(pid)
 			if (product === 'Not found') {
 				return res
 					.status(400)

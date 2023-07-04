@@ -1,6 +1,6 @@
-const Products = require('./productManager')
-const Carts = require('./cartManager')
-const Messages = require('./messageManager')
-const Users = require('./userManager')
+const productManager = require('./productManager')
+const cartManager = require('./cartManager')
+const messageManager = require('./messageManager')
+const userManager = require('./userManager')
 
-module.exports = { Products, Carts, Messages, Users }
+module.exports = { productManager, cartManager, messageManager, userManager }

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { JWT_SECRET } = require('../config/config')
+const { JWT_SECRET } = require('../../config/config')
 // const { env: { JWT_SECRET } } = require('../config')
 
 const generateToken = userId => {

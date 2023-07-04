@@ -1,9 +1,9 @@
-const { Carts, Products } = require("../dao/MongoDB")
+const { cartManager, productManager } = require("../dao/MongoDB")
 
 class CartController {
 	createCart = async (req, res, next) => {
 		try {
-			const cart = await Carts.addCart()
+			const cart = await cartManager.addCart()
 			res.send({ status: 'success', payload: cart })
 		} catch (error) {
 			next(error)
@@ -13,12 +13,12 @@ class CartController {
 	addProductToCart = async (req, res, next) => {
 		const { cid, pid } = req.params
 		try {
-			const product = await Products.getProductById(pid)
+			const product = await productManager.getProductById(pid)
 			if (product === 'Not found')
 				return res
 					.status(400)
 					.send({ status: 'error', error: `El producto con el id ${pid} no existe` })
-			const products = await Carts.addProduct(cid, pid)
+			const products = await cartManager.addProduct(cid, pid)
 			if (products === 'Cart not found')
 				return res
 					.status(400)
@@ -32,7 +32,7 @@ class CartController {
 	getOneCart = async (req, res, next) => {
 		const { cid } = req.params
 		try {
-			const products = await Carts.getProductsByCartId(cid)
+			const products = await cartManager.getProductsByCartId(cid)
 			if (products === 'Not found')
 				return res
 					.status(400)
@@ -46,7 +46,7 @@ class CartController {
 	setCartToEmpty = async (req, res, next) => {
 		const { cid } = req.params
 		try {
-			const products = await Carts.deleteProducts(cid)
+			const products = await cartManager.deleteProducts(cid)
 			if (products === 'Not found')
 				return res
 					.status(400)
@@ -67,12 +67,12 @@ class CartController {
 	removeProductFromCart = async (req, res, next) => {
 		const { cid, pid } = req.params
 		try {
-			const product = await Products.getProductById(pid)
+			const product = await productManager.getProductById(pid)
 			if (product === 'Not found')
 				return res
 					.status(400)
 					.send({ status: 'error', error: `El producto con el id ${pid} no existe` })
-			const products = await Carts.deleteProduct(cid, pid)
+			const products = await cartManager.deleteProduct(cid, pid)
 			if (products === 'Cart not found')
 				return res
 					.status(400)
@@ -94,12 +94,12 @@ class CartController {
 		const { cid, pid } = req.params
 		const { quantity } = req.body
 		try {
-			const product = await Products.getProductById(pid)
+			const product = await productManager.getProductById(pid)
 			if (product === 'Not found')
 				return res
 					.status(400)
 					.send({ status: 'error', error: `El producto con el id ${pid} no existe` })
-			const products = await Carts.updateProduct(cid, pid, quantity)
+			const products = await cartManager.updateProduct(cid, pid, quantity)
 			if (products === 'Cart not found')
 				return res
 					.status(400)

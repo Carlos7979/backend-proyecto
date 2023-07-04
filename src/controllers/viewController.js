@@ -1,10 +1,10 @@
-const { Carts, Products } = require('../dao/MongoDB')
+const { cartManager, productManager } = require('../dao/MongoDB')
 
 class ViewController {
     cartView = async (req, res, next) => {
         const { cid } = req.params
         try {
-            const cart = await Carts.getProductsByCartId(cid)
+            const cart = await cartManager.getProductsByCartId(cid)
             if (cart === 'Cart not found')
                 res.render('not-found', {
                     error: { message: `El carrito con el id ${cid}, no existe` }
@@ -51,7 +51,7 @@ class ViewController {
 			sortLink += `&sort=${sort}`
 		}
 		try {
-			const paginatedProducts = await Products.getPaginatedProducts(limit, page, sort, query)
+			const paginatedProducts = await productManager.getPaginatedProducts(limit, page, sort, query)
 			const { hasPrevPage, hasNextPage, prevPage, nextPage } = paginatedProducts
 			const prevLink = hasPrevPage ? '/products' + limitLink + `&page=${prevPage}` + categoryLink + statusLink + sortLink : null
 			const nextLink = hasNextPage ? '/products' + limitLink + `&page=${nextPage}` + categoryLink + statusLink + sortLink : null
@@ -64,7 +64,7 @@ class ViewController {
 	oneProductView = async (req, res, next) => {
 		try {
 			let { pid } = req.params
-			const product = await Products.getProductById(pid)
+			const product = await productManager.getProductById(pid)
 			if (product === 'Not found') {
 				return res
 					.status(400)

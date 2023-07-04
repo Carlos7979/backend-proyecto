@@ -1,5 +1,5 @@
 const { adminUser } = require("../config")
-const { Users } = require("../dao/MongoDB")
+const { userManager } = require("../dao/MongoDB")
 const { jwt } = require("../utils")
 const { isValidPassword } = require("../utils/hash")
 const { emailValidate } = require("../utils/validate")
@@ -12,7 +12,7 @@ class UserController {
 				throw new Error('Todos los campos son obligatorios')
 			}
 			emailValidate(email)
-			const user = await Users.addUser({ first_name, last_name, email, password, date_of_birth })
+			const user = await userManager.addUser({ first_name, last_name, email, password, date_of_birth })
 			if (user === 'Todos los campos son obligatorios')
 				throw new Error('Todos los campos son obligatorios')
 			if (user === 'Error al crear carrito de compras')
@@ -36,7 +36,7 @@ class UserController {
 				const token = jwt.generateToken(adminUser._id)
 				return res.send({ status: 'success', payload: { token, user: adminUser } })
 			}
-			const user = await Users.getUserByEmail(email)
+			const user = await userManager.getUserByEmail(email)
 			if (user === 'Not found')
 				throw new Error(`El usuario con el email ${email} no se encuentra registrado.`)
 			if (!isValidPassword(user, password))
